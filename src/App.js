@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { useState, useEffect } from "react";
+
+import Header from "./components/Header";
+import Frase from "./components/Frase";
+
+// <img src={logo} className="App-logo" alt="logo" />
 
 function App() {
+  const [frase, guardarFrase] = useState({});
+
+  const consultarApi = async () => {
+    const api = await fetch(
+      "https://breaking-bad-quotes.herokuapp.com/v1/quotes"
+    );
+
+    const frase = await api.json();
+
+    console.log(frase[0]);
+
+    guardarFrase(frase[0]);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header title="Bienvenidos a Breaking Bad" />
+      <Frase frase={frase} />
+      <button onClick={() => consultarApi()}>Consultar</button>
     </div>
   );
 }
